@@ -84,7 +84,7 @@ unmatched = (
     .value_counts()
 )
 
-print(f"總計手機筆數：{len(phones_df)}")
+print(f"總計手機筆數：{phones_df.shape[0]}")
 print(f"成功配對分數：{phones_df['soc_score'].notna().sum()} 筆")
 
 if not unmatched.empty:
