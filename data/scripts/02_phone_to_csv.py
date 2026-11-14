@@ -4,7 +4,7 @@ from pathlib import Path
 
 # ===== 設定 =====
 ROOT = Path(__file__).resolve().parents[1] / "raw" / "smartphone"
-OUTPUT = Path(__file__).resolve().parents[1] / "processed" / "phones.csv"
+OUTPUT = Path(__file__).resolve().parents[1] / "interim" / "phones.csv"
 
 
 def flatten(data: dict, parent_key: str = "") -> dict:
