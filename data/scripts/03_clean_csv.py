@@ -4,7 +4,11 @@ import pandas as pd
 
 # ===== 設定 =====
 ROOT = Path(__file__).resolve().parents[2]
-CSV_PATH = ROOT / "data" / "raw" / "processed" / "phones.csv"
+DATA_DIR = ROOT / "data"
+RAW_DIR = DATA_DIR / "raw"
+INTERIM_DIR = DATA_DIR / "interim"
+
+CSV_PATH = RAW_DIR / "phones.csv"
 
 if not CSV_PATH.is_file():
     raise FileNotFoundError(CSV_PATH)
@@ -27,6 +31,7 @@ mask = (
 )
 
 df = df.loc[mask].copy()
+
 # ===== 刪除全空欄位 =====
 df = df.dropna(axis=1, how="all")
 
@@ -57,7 +62,9 @@ REMOVE_COLUMNS = [
     "display.size",
     "source_urls",
     "verified",
-    "base_model_slug"
+    "base_model_slug",
+    "market_countries",
+    "market_regions"
 ]
 
 df = df.drop(columns=REMOVE_COLUMNS, errors="ignore")
@@ -66,8 +73,8 @@ df = df.drop(columns=REMOVE_COLUMNS, errors="ignore")
 print(f"保留資料：{len(df)} 筆")
 print(f"保留欄位：{len(df.columns)} 個")
 
-# ===== 輸出清理後資料 =====
-OUTPUT_PATH = ROOT / "data" / "raw" / "processed" / "processed_phones.csv"
+# ===== 輸出中繼清理後資料 =====
+OUTPUT_PATH = INTERIM_DIR / "phones.csv"
 OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
