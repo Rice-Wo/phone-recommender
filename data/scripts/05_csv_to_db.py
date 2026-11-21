@@ -30,7 +30,6 @@ def create_schema(conn: sqlite3.Connection) -> None:
             display_type TEXT,
             display_size_inch REAL,
             display_ppi REAL,
-            soc_raw TEXT,
             soc_score REAL,
             normalized_soc_score REAL
         );
@@ -56,6 +55,9 @@ def main() -> None:
     dropped = before_count - df.shape[0]
     if dropped > 0:
         print(f"警告：已過濾 {dropped} 筆重複或無效的 slug 資料")
+
+    # 移除不需要存入資料庫的原始欄位
+    df = df.drop(columns=["soc_raw"], errors="ignore")
 
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 

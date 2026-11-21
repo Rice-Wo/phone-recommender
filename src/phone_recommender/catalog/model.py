@@ -19,6 +19,5 @@ class Phone:
     display_type: Optional[str]
     display_size_inch: Optional[float]
     display_ppi: Optional[float]
-    soc_raw: Optional[str]
     soc_score: Optional[float]
     normalized_soc_score: Optional[float]

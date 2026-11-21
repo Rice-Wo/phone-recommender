@@ -54,7 +54,6 @@ def _row_to_phone(row: sqlite3.Row) -> Phone:
         display_type=row["display_type"],
         display_size_inch=row["display_size_inch"],
         display_ppi=row["display_ppi"],
-        soc_raw=row["soc_raw"],
         soc_score=row["soc_score"],
         normalized_soc_score=row["normalized_soc_score"],
     )
