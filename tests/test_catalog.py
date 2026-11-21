@@ -14,7 +14,7 @@ class TestCatalog(unittest.TestCase):
     def test_load_all_and_immutability(self):
         """驗證全量載入筆數、型別轉換（tuple）與深度不可變保護"""
         phones = load_all()
-        self.assertEqual(len(phones), 255)
+        self.assertEqual(len(phones), 412)
 
         first = phones[0]
         self.assertIsInstance(first, Phone)
