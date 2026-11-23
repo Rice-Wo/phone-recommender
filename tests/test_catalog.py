@@ -60,7 +60,25 @@ class TestCatalog(unittest.TestCase):
         sample_brand = all_phones[0].brand
         brand_phones = filter_by(brand=sample_brand)
         self.assertGreater(len(brand_phones), 0)
-        self.assertTrue(all(p.brand == sample_brand for p in brand_phones))
+        self.assertTrue(all(p.brand.lower() == sample_brand.lower() for p in brand_phones))
+
+        # 驗證 brand 不分大小寫且自動 strip 空白
+        lower_brand_phones = filter_by(brand=f"  {sample_brand.lower()}  ")
+        self.assertEqual(len(lower_brand_phones), len(brand_phones))
+
+        # 驗證 min_soc_score 篩選（確保非空且全數達標）
+        high_soc_phones = filter_by(min_soc_score=60.0)
+        self.assertGreater(len(high_soc_phones), 0)
+        self.assertTrue(
+            all(
+                p.normalized_soc_score is not None and p.normalized_soc_score >= 60.0
+                for p in high_soc_phones
+            )
+        )
+
+        # 驗證條件不成立時安全回傳空串列而非拋出例外
+        empty_phones = filter_by(brand="NonExistentBrandXYZ", min_ram_gb=999)
+        self.assertEqual(empty_phones, [])
 
 
 if __name__ == "__main__":
