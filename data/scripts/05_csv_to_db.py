@@ -35,7 +35,7 @@ def create_schema(conn: sqlite3.Connection) -> None:
         );
     """)
 
-    cursor.execute("CREATE INDEX idx_phones_brand ON phones(brand);")
+    cursor.execute("CREATE INDEX idx_phones_brand ON phones(brand COLLATE NOCASE);")
     cursor.execute("CREATE INDEX idx_phones_os ON phones(os);")
     cursor.execute("CREATE INDEX idx_phones_ram ON phones(ram_gb);")
     cursor.execute("CREATE INDEX idx_phones_soc_score ON phones(normalized_soc_score);")

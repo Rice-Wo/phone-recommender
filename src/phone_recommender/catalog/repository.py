@@ -99,13 +99,31 @@ def filter_by(
         max_weight_g: Optional[float] = None,
         min_soc_score: Optional[float] = None,
 ) -> list[Phone]:
-    """依可選條件動態組合 WHERE 子句查詢（自動吃滿資料庫索引且防注入）"""
+    """依可選硬性條件動態篩選手機（自動吃滿資料庫索引且防 SQL 注入）。
+
+    所有參數皆為選填且必須使用關鍵字引數（Keyword-only）傳入。
+    傳入 None 代表不限制該條件（可直接對應 LLM 解析輸出的 null）。
+
+    Args:
+        brand: 品牌名稱比對（不分大小寫，支援前後空白自動修剪，例如 "samsung"、"Apple"、"asus "）。
+        min_ram_gb: 最低記憶體容量（GB），例如 8.0、12.0。
+        min_battery_mah: 最低電池容量（mAh），例如 5000。
+        max_weight_g: 機身重量上限（公克），例如 190.0。
+        min_soc_score: 最低處理器效能分數（對應 normalized_soc_score，區間約 24.1 ~ 95.5）。
+            例如 50.0 代表中階以上效能，請勿傳入 0.0 ~ 1.0 的比率值。
+
+    Returns:
+        符合所有指定條件的 Phone 物件清單（未做特定排序）。
+
+    Example:
+        >>> phones = filter_by(brand="ASUS", min_ram_gb=12.0, min_soc_score=60.0)
+    """
     conditions: list[str] = []
     params: list[object] = []
 
     if brand is not None:
-        conditions.append("brand = ?")
-        params.append(brand)
+        conditions.append("brand = ? COLLATE NOCASE")
+        params.append(brand.strip())
     if min_ram_gb is not None:
         conditions.append("ram_gb >= ?")
         params.append(min_ram_gb)
